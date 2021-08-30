@@ -48,6 +48,9 @@ def initialize_game():
     intro_screen.set_BG(pygame.image.load("art\DetailBox.png"))
     # Attach screens and dialog boxes to the game object
     GO.add_screen(intro_screen)
+    exit_button = pg.panel(75,76,pygame.image.load("art\Exit button.png"))
+    exit_button.place(693,12,intro_screen)
+    
 
     return(GO)
 
