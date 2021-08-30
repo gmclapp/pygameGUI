@@ -50,7 +50,16 @@ def initialize_game():
     GO.add_screen(intro_screen)
     exit_button = pg.panel(75,76,pygame.image.load("art\Exit button.png"))
     exit_button.place(693,12,intro_screen)
+
+    BG = pygame.image.load("art\ButtonBG1.png")
+    label = pygame.image.load("art\ConfirmLabel.png")
+    confirm = pg.button(217,217,BG,BG,label,confirmLMB)
+    confirm.place(100,100,intro_screen)
     
+    BG = pygame.image.load("art\ButtonBG1.png")
+    label = pygame.image.load("art\CancelLabel.png")
+    cancel = pg.button(217,217,BG,BG,label,cancelLMB)
+    cancel.place(350,100,intro_screen)
 
     return(GO)
 
@@ -67,6 +76,12 @@ def draw_game():
 def quit_nicely():
     pygame.display.quit()
     pygame.quit()
+
+def confirmLMB():
+    print("confirmed")
+
+def cancelLMB():
+    print("cancelled")
     
 def game_main_loop():
     game_quit = False

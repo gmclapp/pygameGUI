@@ -19,7 +19,7 @@ class screen:
         '''processes x,y coordinates of a mouse button press and the mouse
         button used to generate it.'''
         for e in self.elements:
-            e.is_pressed(x,y)
+            e.is_pressed(x,y,MB)
 
     def is_clicked(self,x,y,MB):
         for e in self.elements:
@@ -46,6 +46,7 @@ class screen:
 class panel:
     def __init__(self,wid,hei,art):
         self.active = True
+        self.pressed = False
         self.wid = wid
         self.hei = hei
 
@@ -57,6 +58,31 @@ class panel:
         self.screen = screen
         screen.add_element(self)
 
+    def is_pressed(self, mx, my,MB):
+        mx -= self.screen.x
+        my -= self.screen.y
+        if self.x < mx < self.x+self.wid and self.y < my < self.y+self.hei:
+            if MB == "LEFT":
+                self.pressed = True
+        else:
+            self.pressed = False
+
+    def is_clicked(self,mx,my,MB):
+        mx -= self.screen.x
+        my -= self.screen.y
+        if self.x < mx < self.x+self.wid and self.y < my < self.y+self.hei:
+            if MB == "LEFT":
+                self.clicked = True
+            elif MB == "RIGHT":
+                self.Rclicked = True
+            elif MB == "BOTH":
+                self.Simul_clicked = True
+                
+        else:
+            self.clicked = False
+            self.Rclicked = False
+            self.Simul_clicked = False
+            
     def update(self):
         pass
     def draw(self):
@@ -64,7 +90,50 @@ class panel:
             self.screen.surf.blit(self.art,(self.x,self.y))
             
 class button(panel):
-    pass
+    def __init__(self,wid,hei,art,pressed_art,label_art,action=None,RMB_action=None,Simul_action=None):
+        super().__init__(wid,hei,art)
+        self.pressed = False
+        self.clicked = False
+        self.Rclicked = False
+        self.Simul_clicked = False
+
+        self.pressed_art = pressed_art
+        self.label_art = label_art
+        self.action = action
+        self.RMB_action = RMB_action
+        self.Simul_action = Simul_action
+
+    def update(self):
+        if self.clicked:
+            if self.action:
+                self.action()
+            else:
+                print("No action assigned to LMB.")
+            self.clicked = False
+            self.pressed = False
+        if self.Rclicked:
+            if self.RMB_action:
+                self.RMB_action()
+            else:
+                print("No action assigned to RMB.")
+            self.Rclicked = False
+            self.pressed = False
+        if self.Simul_clicked:
+            if self.Simul_action:
+                self.Simul_action()
+            else:
+                print("No action assigned to simultaneous click.")
+                self.Simul_clicked = False
+                self.pressed = False
+
+    def draw(self):
+        if self.pressed:
+            self.screen.surf.blit(self.pressed_art,(self.x,self.y))
+        else:
+            self.screen.surf.blit(self.art,(self.x,self.y))
+        if self.label_art:
+            self.screen.surf.blit(self.label_art,(self.x,self.y))
+            
 class radio_button_manager():
     pass
 class radio_button(button):
