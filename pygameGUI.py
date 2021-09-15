@@ -1,6 +1,8 @@
 import pygame
 import os
 
+__version__ = 0.1
+
 class screen_manager:
     def __init__(self):
         self.screens = {}
