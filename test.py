@@ -7,13 +7,11 @@ class game_object:
     def __init__(self):
         self.width = 600
         self.height = 300
+
         self.screenManager = pg.screen_manager()
 
         self.FPS = pygame.time.Clock()
-        self.SURFACE_MAIN = pygame.display.set_mode((self.width,
-                                                     self.height))
 
-        
     def set_screen_size(self,w,h):
         self.width = w
         self.height = h
@@ -28,7 +26,6 @@ def initialize_game():
     
     GO = game_object()
     GO.FPS = pygame.time.Clock()
-    GO.SURFACE_MAIN = pygame.display.set_mode((1000,1000))
     
     # Build game screens
     intro_screen = pg.screen("intro",0,0,784,947)
@@ -57,8 +54,6 @@ def update_game():
 
 def draw_game():
     GO.screenManager.draw()
-    GO.SURFACE_MAIN.blit(GO.screenManager.screens[GO.screenManager.active_screen].surf,
-                         (0,0))
     pygame.display.flip()
 
 def quit_nicely():
@@ -89,12 +84,6 @@ def game_main_loop():
         for event in event_list:
             if event.type == pygame.QUIT:
                 game_quit = True
-
-            if event.type == pygame.KEYDOWN and GO.dialogs["name"].active:
-                if event.key == pygame.K_BACKSPACE:
-                    GO.win_player.set(GO.win_player.get()[:-1])
-                else:
-                    GO.win_player.set(GO.win_player.get() + event.unicode)
                                       
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:

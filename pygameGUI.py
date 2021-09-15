@@ -5,6 +5,7 @@ class screen_manager:
     def __init__(self):
         self.screens = {}
         self.active_screen = None
+        self.SURFACE_MAIN = pygame.display.set_mode((900,1200))
 
     def add_screen(self,new_screen):
         if len(self.screens)== 0:
@@ -23,7 +24,9 @@ class screen_manager:
         self.screens[self.active_screen].update()
         
     def draw(self):
+        self.SURFACE_MAIN.fill((100,100,100))
         self.screens[self.active_screen].draw()
+        self.SURFACE_MAIN.blit(self.screens[self.active_screen].surf,(0,0))
         
 class screen:
     def __init__(self, name, x=0, y=0,wid=100,hei=100):
@@ -34,7 +37,8 @@ class screen:
         self.wid = wid
         self.hei = hei
         self.name = name
-        self.surf = pygame.Surface((wid,hei))
+        self.surf = pygame.Surface((wid,hei),pygame.SRCALPHA,32)
+        self.surf = self.surf.convert_alpha()
 
     def set_BG(self,background):
         self.BG = background
