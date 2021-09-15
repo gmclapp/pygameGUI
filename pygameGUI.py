@@ -1,6 +1,30 @@
 import pygame
 import os
 
+class screen_manager:
+    def __init__(self):
+        self.screens = {}
+        self.active_screen = None
+
+    def add_screen(self,new_screen):
+        if len(self.screens)== 0:
+            self.active_screen = new_screen.name
+            
+        self.screens[new_screen.name] = new_screen
+
+    def change_active_screen(self,screen):
+        if self.active_screen != screen:
+            # Need to handle what happens when the requested screen doesn't exist.
+            self.active_screen = screen
+        else:
+            pass
+
+    def update(self):
+        self.screens[self.active_screen].update()
+        
+    def draw(self):
+        self.screens[self.active_screen].draw()
+        
 class screen:
     def __init__(self, name, x=0, y=0,wid=100,hei=100):
         self.elements = []

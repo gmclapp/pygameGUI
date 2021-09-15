@@ -7,8 +7,9 @@ class game_object:
     def __init__(self):
         self.width = 600
         self.height = 300
-        self.screens = {}
-        self.active_screen = "intro"
+        self.screenManager = pg.screen_manager()
+##        self.screens = {}
+##        self.active_screen = "intro"
         self.FPS = pygame.time.Clock()
         self.SURFACE_MAIN = pygame.display.set_mode((self.width,
                                                      self.height))
@@ -19,17 +20,17 @@ class game_object:
         self.width = w
         self.height = h
         
-    def change_active_screen(self,screen):
-        if self.active_screen != screen:
-            self.active_screen = screen
-        else:
-            pass
+##    def change_active_screen(self,screen):
+##        if self.active_screen != screen:
+##            self.active_screen = screen
+##        else:
+##            pass
         
-    def add_screen(self,new_screen):
-        key = new_screen.name
-        val = new_screen
-        
-        self.screens[key] = val
+##    def add_screen(self,new_screen):
+##        key = new_screen.name
+##        val = new_screen
+##        
+##        self.screens[key] = val
 
     def update(self):
         pass
@@ -44,10 +45,10 @@ def initialize_game():
     GO.SURFACE_MAIN = pygame.display.set_mode((1000,1000))
     # Build game screens
     intro_screen = pg.screen("intro",0,0,784,947)
-    # Set background art for screens and dialog boxes
     intro_screen.set_BG(pygame.image.load("art\DetailBox.png"))
-    # Attach screens and dialog boxes to the game object
-    GO.add_screen(intro_screen)
+    
+    GO.screenManager.add_screen(intro_screen)
+##    GO.add_screen(intro_screen)
     exit_button = pg.panel(75,76,pygame.image.load("art\Exit button.png"))
     exit_button.place(693,12,intro_screen)
 
@@ -65,11 +66,12 @@ def initialize_game():
 
 def update_game():
     GO.update()
-    GO.screens[GO.active_screen].update()
+    GO.screenManager.update()
 
 def draw_game():
-    GO.screens[GO.active_screen].draw()        
-    GO.SURFACE_MAIN.blit(GO.screens[GO.active_screen].surf,
+##    GO.screens[GO.active_screen].draw()
+    GO.screenManager.draw()
+    GO.SURFACE_MAIN.blit(GO.screenManager.screens[GO.screenManager.active_screen].surf,
                          (0,0))
     pygame.display.flip()
 
@@ -140,7 +142,7 @@ def game_main_loop():
                     Dialog_active = True
                     GO.dialogs[Diag].is_pressed(down_x,down_y,"LEFT")
             if not Dialog_active:
-                GO.screens[GO.active_screen].is_pressed(down_x,down_y,"LEFT")
+                GO.screenManager.screens[GO.screenManager.active_screen].is_pressed(down_x,down_y,"LEFT")
                 
         if RMB_down:
             Dialog_active = False
@@ -149,7 +151,7 @@ def game_main_loop():
                     Dialog_active = True
                     GO.dialogs[Diag].is_pressed(down_x,down_y,"RIGHT")
             if not Dialog_active:
-                GO.screens[GO.active_screen].is_pressed(down_x,down_y,"RIGHT")
+                GO.screenManager.screens[GO.screenManager.active_screen].is_pressed(down_x,down_y,"RIGHT")
 
         if L_click:
             Dialog_active = False
@@ -158,7 +160,7 @@ def game_main_loop():
                     Dialog_active = True
                     GO.dialogs[Diag].is_clicked(click_x,click_y,"LEFT")
             if not Dialog_active:
-                GO.screens[GO.active_screen].is_clicked(click_x,click_y,"LEFT")
+                GO.screenManager.screens[GO.screenManager.active_screen].is_clicked(click_x,click_y,"LEFT")
             L_click = False
                 
         if R_click:
@@ -168,7 +170,7 @@ def game_main_loop():
                     Dialog_active = True
                     GO.dialogs[Diag].is_clicked(click_x,click_y,"RIGHT")
             if not Dialog_active:
-                GO.screens[GO.active_screen].is_clicked(click_x,click_y,"RIGHT")
+                GO.screenManager.screens[GO.screenManager.active_screen].is_clicked(click_x,click_y,"RIGHT")
             R_click = False
         if Simul_click:
             Dialog_active = False
@@ -177,7 +179,7 @@ def game_main_loop():
                     Dialog_active = True
                     GO.dialogs[Diag].is_clicked(click_x,click_y,"BOTH")
             if not Dialog_active:
-                GO.screens[GO.active_screen].is_clicked(click_x,click_y,"BOTH")
+                GO.screenManager.screens[GO.screenManager.active_screen].is_clicked(click_x,click_y,"BOTH")
             Simul_click = False
                 
 
