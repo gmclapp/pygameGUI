@@ -7,7 +7,7 @@ class screen_manager:
     def __init__(self):
         self.screens = {}
         self.active_screen = None
-        self.SURFACE_MAIN = pygame.display.set_mode((900,1200))
+        self.SURFACE_MAIN = pygame.display.set_mode((1600,1000))
 
     def add_screen(self,new_screen):
         if len(self.screens)== 0:
@@ -67,7 +67,7 @@ class screen:
     def add_element(self,new_element):
         self.elements.append(new_element)
 
-    def remove_button(self,element):
+    def remove_element(self,element):
         self.elements.remove(element)
         
     def make_active(self):
@@ -165,8 +165,81 @@ class button(panel):
             self.screen.surf.blit(self.label_art,(self.x,self.y))
             
 class radio_button_manager():
-    pass
+    def __init__(self):
+        self.var = 0 # Currently selected radio button
+        self.buttons = []
+
+    def add_button(self,button):
+        button.index = len(self.buttons) # tell the button what its index is
+        if button.index == 0:
+            button.active = True
+        self.buttons.append(button)
+        button.manager = self
+
+    def make_active(self,button_index):
+        for i,b in enumerate(self.buttons):
+            if i == button_index:
+                b.active = True
+                self.var = i
+            else:
+                b.active = False
+
+    def get_var(self):
+        return(self.var)
+    
+    def set_var(self,new):
+        self.var = new
+        for i,b in enumerate(self.buttons):
+            if i == new:
+                b.active = True
+            else:
+                b.active = False
+            
+    
 class radio_button(button):
-    pass
+    def __init__(self,wid,hei,art,pressed_art,label_art,action=None,RMB_action=None,Simul_action=None,active_art=None):
+        super().__init__(wid,hei,art,pressed_art,label_art,action,RMB_action,Simul_action)
+        self.active_art = active_art
+        self.active = False
+        self.action = self.make_active
+        
+    def update(self):
+        if self.clicked:
+            if self.action:
+                self.action()
+                
+            else:
+                print("No action assigned to LMB.")
+            self.clicked = False
+            self.pressed = False
+        if self.Rclicked:
+            if self.RMB_action:
+                self.RMB_action()
+            else:
+                print("No action assigned to RMB.")
+            self.Rclicked = False
+            self.pressed = False
+        if self.Simul_clicked:
+            if self.Simul_action:
+                self.Simul_action()
+            else:
+                print("No action assigned to simultaneous click.")
+                self.Simul_clicked = False
+                self.pressed = False
+
+    def make_active(self):
+        self.manager.make_active(self.index)
+                
+    def draw(self):
+        if self.pressed:
+            self.screen.surf.blit(self.pressed_art,(self.x,self.y))
+        else:
+            self.screen.surf.blit(self.art,(self.x,self.y))
+            
+        if self.active:
+            self.screen.surf.blit(self.active_art,(self.x,self.y))
+        else:
+            self.screen.surf.blit(self.label_art,(self.x,self.y))
+            
 class indicator(panel):
     pass
