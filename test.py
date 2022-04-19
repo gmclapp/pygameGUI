@@ -33,17 +33,18 @@ def initialize_game():
     
     GO.screenManager.add_screen(intro_screen)
 
-    exit_button = pg.panel(75,76,pygame.image.load("art\Exit button.png"))
+    label = pygame.image.load("art\Exit button.png")
+    exit_button = pg.button(75,76,label,label,label,quit_nicely)
     exit_button.place(693,12,intro_screen)
 
     BG = pygame.image.load("art\ButtonBG1.png")
     label = pygame.image.load("art\ConfirmLabel.png")
-    confirm = pg.button(217,217,BG,BG,label,confirmLMB)
+    confirm = pg.button(128,128,BG,BG,label,confirmLMB)
     confirm.place(100,100,intro_screen)
     
     BG = pygame.image.load("art\ButtonBG1.png")
     label = pygame.image.load("art\CancelLabel.png")
-    cancel = pg.button(217,217,BG,BG,label,cancelLMB)
+    cancel = pg.button(128,128,BG,BG,label,cancelLMB)
     cancel.place(350,100,intro_screen)
 
     return(GO)
